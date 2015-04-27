@@ -55,5 +55,6 @@ public class DemoRESTRequestFilter implements ContainerRequestFilter {
         {
         	x = 1;
         }
+        
     }
 }
