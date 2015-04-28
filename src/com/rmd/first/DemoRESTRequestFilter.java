@@ -40,8 +40,6 @@ public class DemoRESTRequestFilter implements ContainerRequestFilter {
             return;
         }
 
-        Integer x = 0;
-        
         // For any other methods besides login, the authToken must be verified
         if ( !path.contains( "demo-business-resource/login" ) ) {
             String authToken = requestCtx.getHeaderString( DemoHTTPHeaderNames.AUTH_TOKEN );
@@ -50,10 +48,6 @@ public class DemoRESTRequestFilter implements ContainerRequestFilter {
             if ( !demoAuthenticator.isAuthTokenValid( serviceKey, authToken ) ) {
                 requestCtx.abortWith( Response.status( Response.Status.UNAUTHORIZED ).build() );
             }
-        }
-        else
-        {
-        	x = 1;
         }
         
     }

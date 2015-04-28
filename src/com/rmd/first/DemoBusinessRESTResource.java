@@ -4,7 +4,7 @@ package com.rmd.first;
 import com.rmd.first.DemoBusinessRESTResourceProxy;
 import com.rmd.first.DemoHTTPHeaderNames;
 
-import java.security.GeneralSecurityException;
+
 
 import javax.ejb.Stateless;
 import javax.json.Json;
@@ -21,6 +21,12 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.ext.*;
+import javax.ws.rs.core.SecurityContext;
+
+
 
 @Stateless( name = "DemoBusinessRESTResource", mappedName = "ejb/DemoBusinessRESTResource" )
 @Path( "demo-business-resource" )
@@ -28,6 +34,8 @@ public class DemoBusinessRESTResource implements DemoBusinessRESTResourceProxy {
 
     private static final long serialVersionUID = -6663599014192066936L;
 
+    @Context private SecurityContext securityContext;
+    
     @Override
     @POST
     @Path( "login" )
@@ -41,6 +49,15 @@ public class DemoBusinessRESTResource implements DemoBusinessRESTResourceProxy {
         String serviceKey = httpHeaders.getHeaderString( DemoHTTPHeaderNames.SERVICE_KEY );
 
         try {
+        	
+            // retrieve the authentication scheme that was used(e.g. BASIC)
+            String authnScheme = securityContext.getAuthenticationScheme();
+            // retrieve the name of the Principal that invoked the resource
+            String un = securityContext.getUserPrincipal().getName();
+            // check if the current user is in Role1 
+            Boolean isUserInRole = securityContext.isUserInRole("Role1");
+            
+             
             String authToken = demoAuthenticator.login( serviceKey, username, password );
 
             JsonObjectBuilder jsonObjBuilder = Json.createObjectBuilder();
