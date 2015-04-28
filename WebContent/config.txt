@@ -1,0 +1,23 @@
+  <!-- Security constraint for the sample application -->
+  <security-constraint id="SecurityConstraint_1">
+    <!-- This defines the REST resource associated with the constraint. -->
+    <web-resource-collection id="WebResourceCollection_1">
+      <web-resource-name>Jersey REST Service</web-resource-name>
+      <description>Protection area for Rest resource /* </description>
+      <url-pattern>/rest/*</url-pattern>
+      <http-method>GET</http-method>
+      <http-method>POST</http-method>
+    </web-resource-collection>
+
+    <!-- This defines an authorization constraint by requiring Role1 for the resource. -->
+    <auth-constraint id="AuthConstraint_1">
+      <description>Used to guard resources under this url-pattern </description>
+      <role-name>manager</role-name>
+    </auth-constraint>
+  </security-constraint>
+  
+  <!-- This defines a HTTP basic authentication login configuration. -->
+ <login-config>
+        <auth-method>BASIC</auth-method>
+        <realm-name>test realm</realm-name>
+ </login-config>

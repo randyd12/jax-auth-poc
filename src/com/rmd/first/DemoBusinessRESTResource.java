@@ -21,7 +21,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
+import javax.ws.rs.core.SecurityContext;
 
 import java.lang.annotation.Annotation;
 
@@ -36,19 +36,27 @@ import javax.annotation.security.DenyAll;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 
+
+
+
 //import org.glassfish.jersey.examples.entityfiltering.security.domain.RestrictedEntity;
 import org.glassfish.jersey.internal.util.Tokenizer;
 import org.glassfish.jersey.message.filtering.SecurityAnnotations;
+import org.glassfish.jersey.message.filtering.SecurityEntityFilteringFeature;
+import org.glassfish.jersey.server.ResourceConfig;
 
 
 
 
 @Stateless( name = "DemoBusinessRESTResource", mappedName = "ejb/DemoBusinessRESTResource" )
 @Path( "demo-business-resource" )
-public class DemoBusinessRESTResource implements DemoBusinessRESTResourceProxy {
+public class DemoBusinessRESTResource   implements DemoBusinessRESTResourceProxy {
 
+
+	@Context private SecurityContext securityContext;
+	
+	
     private static final long serialVersionUID = -6663599014192066936L;
-
     
     @GET
     @Path("denyAll")
@@ -78,6 +86,15 @@ public class DemoBusinessRESTResource implements DemoBusinessRESTResourceProxy {
         DemoAuthenticator demoAuthenticator = DemoAuthenticator.getInstance();
         String serviceKey = httpHeaders.getHeaderString( DemoHTTPHeaderNames.SERVICE_KEY );
 
+        // retrieve the authentication scheme that was used(e.g. BASIC)
+        String authnScheme = securityContext.getAuthenticationScheme();
+        // retrieve the name of the Principal that invoked the resource
+        String username2 = securityContext.getUserPrincipal().getName();
+        // check if the current user is in Role1 
+        Boolean isUserInRole = securityContext.isUserInRole("Role1");
+        isUserInRole = securityContext.isUserInRole("manager");
+         
+         
         try {
             String authToken = demoAuthenticator.login( serviceKey, username, password );
 
@@ -99,11 +116,11 @@ public class DemoBusinessRESTResource implements DemoBusinessRESTResourceProxy {
     @Override
     @GET
     @Path( "demo-get-method" )
-    @RolesAllowed({"manager"})
+    @RolesAllowed({"uber-manager"})
     @Produces( MediaType.APPLICATION_JSON )
     public Response demoGetMethod() {
         JsonObjectBuilder jsonObjBuilder = Json.createObjectBuilder();
-        jsonObjBuilder.add( "message", "Executed demoGetMethod" );
+        jsonObjBuilder.add( "message", "Executed demoGetMethod, uh-hu" );
         JsonObject jsonObj = jsonObjBuilder.build();
 
         return getNoCacheResponseBuilder( Response.Status.OK ).entity( jsonObj.toString() ).build();
