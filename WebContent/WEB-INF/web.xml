@@ -18,6 +18,10 @@
         <param-name>jersey.config.server.provider.packages</param-name>
         <param-value>com.rmd.first</param-value>
     </init-param>
+    <init-param>
+        <param-name>javax.ws.rs.Application</param-name>
+        <param-value>com.rmd.first.DemoConfig</param-value>
+    </init-param>
     <load-on-startup>1</load-on-startup>
   </servlet>
   <servlet-mapping>

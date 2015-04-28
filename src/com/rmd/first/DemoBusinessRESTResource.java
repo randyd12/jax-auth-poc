@@ -58,20 +58,6 @@ public class DemoBusinessRESTResource   implements DemoBusinessRESTResourceProxy
 	
     private static final long serialVersionUID = -6663599014192066936L;
     
-    @GET
-    @Path("denyAll")
-    @DenyAll
-    @Produces( MediaType.APPLICATION_JSON )
-    public Response denyAll() {
-    	
-        JsonObjectBuilder jsonObjBuilder = Json.createObjectBuilder();
-        jsonObjBuilder.add( "error", "denny all response" );
-        JsonObject jsonObj = jsonObjBuilder.build();
-
-        return getNoCacheResponseBuilder( Response.Status.OK ).entity( jsonObj.toString() ).build();
-        
-    }
-    
     
     @Override
     @POST
@@ -85,15 +71,6 @@ public class DemoBusinessRESTResource   implements DemoBusinessRESTResourceProxy
     	
         DemoAuthenticator demoAuthenticator = DemoAuthenticator.getInstance();
         String serviceKey = httpHeaders.getHeaderString( DemoHTTPHeaderNames.SERVICE_KEY );
-
-        // retrieve the authentication scheme that was used(e.g. BASIC)
-        String authnScheme = securityContext.getAuthenticationScheme();
-        // retrieve the name of the Principal that invoked the resource
-        String username2 = securityContext.getUserPrincipal().getName();
-        // check if the current user is in Role1 
-        Boolean isUserInRole = securityContext.isUserInRole("Role1");
-        isUserInRole = securityContext.isUserInRole("manager");
-         
          
         try {
             String authToken = demoAuthenticator.login( serviceKey, username, password );
@@ -116,10 +93,26 @@ public class DemoBusinessRESTResource   implements DemoBusinessRESTResourceProxy
     @Override
     @GET
     @Path( "demo-get-method" )
-    @RolesAllowed({"uber-manager"})
+    @RolesAllowed({"manager"})
     @Produces( MediaType.APPLICATION_JSON )
     public Response demoGetMethod() {
-        JsonObjectBuilder jsonObjBuilder = Json.createObjectBuilder();
+        
+    	
+    	//NOTE:  this is just for debugging that you can check the user name and if they 
+        //are in a role.
+        
+        // retrieve the authentication scheme that was used(e.g. BASIC)
+        String authnScheme = securityContext.getAuthenticationScheme();
+        // retrieve the name of the Principal that invoked the resource
+        String username2 = securityContext.getUserPrincipal().getName();
+        // check if the current user is in Role1 
+        Boolean isUserInRole = securityContext.isUserInRole("Role1");
+        isUserInRole = securityContext.isUserInRole("manager");
+        
+        
+        
+    	
+    	JsonObjectBuilder jsonObjBuilder = Json.createObjectBuilder();
         jsonObjBuilder.add( "message", "Executed demoGetMethod, uh-hu" );
         JsonObject jsonObj = jsonObjBuilder.build();
 

@@ -7,9 +7,7 @@
     <body>
         <div id="logMsgDiv"></div>
         
-        In this branch I will get the JAX-RS filters working instead of the Apache filter.
         
-
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
         <script type="text/javascript">
             var $ = jQuery.noConflict();
@@ -77,7 +75,7 @@
                 url: "//localhost:8080/jax-auth-poc/rest/demo-business-resource/demo-get-method/",
                 type: "GET",
                 success: function( jsonObj, textStatus, xhr ) {
-                    var htmlContent = $( "#logMsgDiv" ).html( ) + "<p>After login, execute demoteGetMethod with the auth-token obtained. JSON Message: " + jsonObj.message + "</p>";
+                    var htmlContent = $( "#logMsgDiv" ).html( ) + "<p>After login, execute demoGetMethod with the auth-token obtained. JSON Message: " + jsonObj.message + "</p>";
                     $( "#logMsgDiv" ).html( htmlContent );
                 },
                 error: function( xhr, textStatus, errorThrown ) {
