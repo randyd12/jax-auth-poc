@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+http://localhost:8080/jax-auth-poc/
+
+
+This demo was based on:
+http://www.developerscrappad.com/1814/java/java-ee/rest-jax-rs/java-ee-7-jax-rs-2-0-simple-rest-api-authentication-authorization-with-custom-http-header/
+
+I had to change the demo code and move the annotations from the interface to the implementation:
+http://jersey.576304.n2.nabble.com/Annotations-in-interfaces-how-to-use-with-jersey-td7582032.html
+
+
+Stormpath recommends that JWT are stored client side in cookies because they are not vulnerable to XSS like html 5 local storage are:
+https://stormpath.com/blog/where-to-store-your-jwts-cookies-vs-html5-web-storage/
+
+
+Now trying to figure out how to use jersey annotation based security
+https://jersey.java.net/documentation/latest/user-guide.html#ef.security.annotations
+https://jersey.java.net/documentation/latest/entity-filtering.html
+
+http://blog.dejavu.sk/2015/02/04/jerseys-entity-filtering-meets-jackson/
+
+https://github.com/jersey/jersey/tree/2.17/examples/entity-filtering
+
+
+</body>
+</html>

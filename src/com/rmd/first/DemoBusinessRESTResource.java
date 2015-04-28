@@ -22,15 +22,53 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+
+import java.lang.annotation.Annotation;
+
+import javax.ws.rs.DefaultValue;
+//import javax.ws.rs.GET;
+//import javax.ws.rs.Path;
+//import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+//import javax.ws.rs.core.Response;
+
+import javax.annotation.security.DenyAll;
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
+
+//import org.glassfish.jersey.examples.entityfiltering.security.domain.RestrictedEntity;
+import org.glassfish.jersey.internal.util.Tokenizer;
+import org.glassfish.jersey.message.filtering.SecurityAnnotations;
+
+
+
+
 @Stateless( name = "DemoBusinessRESTResource", mappedName = "ejb/DemoBusinessRESTResource" )
 @Path( "demo-business-resource" )
 public class DemoBusinessRESTResource implements DemoBusinessRESTResourceProxy {
 
     private static final long serialVersionUID = -6663599014192066936L;
 
+    
+    @GET
+    @Path("denyAll")
+    @DenyAll
+    @Produces( MediaType.APPLICATION_JSON )
+    public Response denyAll() {
+    	
+        JsonObjectBuilder jsonObjBuilder = Json.createObjectBuilder();
+        jsonObjBuilder.add( "error", "denny all response" );
+        JsonObject jsonObj = jsonObjBuilder.build();
+
+        return getNoCacheResponseBuilder( Response.Status.OK ).entity( jsonObj.toString() ).build();
+        
+    }
+    
+    
     @Override
     @POST
     @Path( "login" )
+    @PermitAll
     @Produces( MediaType.APPLICATION_JSON )
     public Response login(
         @Context HttpHeaders httpHeaders,
@@ -61,6 +99,7 @@ public class DemoBusinessRESTResource implements DemoBusinessRESTResourceProxy {
     @Override
     @GET
     @Path( "demo-get-method" )
+    @RolesAllowed({"manager"})
     @Produces( MediaType.APPLICATION_JSON )
     public Response demoGetMethod() {
         JsonObjectBuilder jsonObjBuilder = Json.createObjectBuilder();
@@ -73,6 +112,7 @@ public class DemoBusinessRESTResource implements DemoBusinessRESTResourceProxy {
     @Override
     @POST
     @Path( "demo-post-method" )
+    @RolesAllowed({"manager"})
     @Produces( MediaType.APPLICATION_JSON )
     public Response demoPostMethod() {
         JsonObjectBuilder jsonObjBuilder = Json.createObjectBuilder();
@@ -85,6 +125,7 @@ public class DemoBusinessRESTResource implements DemoBusinessRESTResourceProxy {
     @Override
     @POST
     @Path( "logout" )
+    @PermitAll
     public Response logout(
         @Context HttpHeaders httpHeaders ) {
         try {
